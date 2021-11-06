@@ -1,0 +1,8 @@
+{
+    "mysql" : {
+        "host" : "dt3bgg3gu6nqye5f.cbetxkdyhwsb.us-east-1.rds.amazonaws.com",
+        "user" : "wpmuxqbwntk64ukj",
+        "password": "qs7vy6vzehljgcex",
+        "database": "kivlb7m0bb34zkx2" 
+    }
+}

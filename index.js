@@ -1,11 +1,23 @@
-const express = require("express");
-const app = express();
-const port = 3000;
+//dependencies import
+const express = require("express")
+const bodyParser = require("body-parser")
+
+//File import
+const ResturantRoute =  require("./routes/restaurant")
+
+let app = express()
+
+//app.use lines
+app.use(bodyParser.json())
+app.use("/restaurant",ResturantRoute)
+
+
 
 app.get("/",(req,res) => {
-    res.send("hellow World");
+    res.send("hello World")
 });
 
-app.listen(process.env.PORT || port, () => {
-    console.log("connected");
+//port listen
+app.listen(process.env.PORT || 3000, () => {
+    console.log("connected")
 });
