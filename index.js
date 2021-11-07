@@ -1,6 +1,7 @@
 //dependencies import
 const express = require("express")
 const bodyParser = require("body-parser")
+const cors = require("cors")
 
 //File import
 const ResturantRoute =  require("./routes/restaurant")
@@ -8,6 +9,7 @@ const ResturantRoute =  require("./routes/restaurant")
 let app = express()
 
 //app.use lines
+app.use(cors())
 app.use(bodyParser.json())
 app.use("/restaurant",ResturantRoute)
 
