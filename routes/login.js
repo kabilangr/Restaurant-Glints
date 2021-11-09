@@ -8,15 +8,16 @@ const mysqlConnection = require("../connection")
 Router.post("/",(req,res)=> {
     mysqlConnection.query(`select * from userLogin where email="${req.body.login}";`, (err,rows,fields)=> {
         if(!err){
-            console.log(req.body,rows)
-            if(req.body.password === rows[0].password) {
-                res.send({
-                    code: 200,
-                    userName: rows[0].user_name,
-                    id: rows[0].iduserLogin,
-                    successfull: true
-                })
-                console.log("updated successfully")
+            if(rows.length) {
+                if(req.body.password === rows[0].password) {
+                    res.send({
+                        code: 200,
+                        userName: rows[0].user_name,
+                        id: rows[0].iduserLogin,
+                        successfull: true
+                    })
+                    console.log("updated successfully")
+                }
             }
             else {
                 res.send({
