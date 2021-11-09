@@ -9,12 +9,13 @@ Router.post("/",(req,res)=> {
     let SQL = "INSERT INTO userLogin ( `email`, `password`, `user_name`) VALUES (?, ?, ?);"
     mysqlConnection.query(`select * from userLogin where email="${req.body.email}";`, (err,rows,fields)=> {
         if(!err) {
-            console.log(rows)
             if(rows.length === 0){
                 mysqlConnection.query(SQL,[req.body.email,req.body.password,req.body.userName], (err,rows,fields)=> {
                     if(!err){
                         res.send({
                             code: 200,
+                            id: rows.insertId,
+                            userName: req.body.userName,
                             successfull: true
                         })
                         console.log("updated successfully")
