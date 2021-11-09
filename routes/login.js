@@ -6,8 +6,9 @@ const Router = express.Router()
 const mysqlConnection = require("../connection")
 
 Router.post("/",(req,res)=> {
-    mysqlConnection.query(`select * from userLogin where email="?";`,[req.body.login], (err,rows,fields)=> {
+    mysqlConnection.query(`select * from userLogin where email="${req.body.login}";`, (err,rows,fields)=> {
         if(!err){
+            console.log(req.body,rows)
             if(req.body.password === rows[0].password) {
                 res.send({
                     code: 200,
