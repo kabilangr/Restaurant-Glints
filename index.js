@@ -7,6 +7,7 @@ const cors = require("cors")
 const ResturantRoute =  require("./routes/restaurant")
 const Login = require("./routes/login")
 const signup = require("./routes/signup")
+const collection = require("./routes/collection")
 
 let app = express()
 
@@ -16,6 +17,7 @@ app.use(bodyParser.json())
 app.use("/restaurant",ResturantRoute)
 app.use("/login",Login)
 app.use("/signup",signup)
+app.use("/collection",collection)
 
 
 
