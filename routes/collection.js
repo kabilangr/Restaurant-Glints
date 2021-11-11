@@ -5,6 +5,28 @@ const Router = express.Router()
 //mysql connection dependencies
 const mysqlConnection = require("../connection")
 
+Router.get("/",(req,res)=> {
+    let SQL
+    if(req.body.id)
+        SQL = `select * from collections where iduser="${req.body.id}";`
+    else 
+        SQL = `select * from collections;`
+    mysqlConnection.query(SQL, (err,rows,fields)=> {
+        if(!err) {
+            res.send({
+                code: 200,
+                collection_name: rows
+            })
+        } else {
+            res.send({
+                message:JSON.stringify(err),
+                code: 400,
+            })
+            console.log(err)
+        }
+    })
+})
+
 Router.post("/create",(req,res)=> {
     const SQL1 = `select * from userLogin where iduserLogin="${req.body.id}";`
     const SQL2 = `select * from collections where iduser="${req.body.id}" AND name="${req.body.name}";`
@@ -53,6 +75,7 @@ Router.post("/create",(req,res)=> {
         }
     })
 })
+
 
 
 
