@@ -6,7 +6,7 @@ const Router = express.Router()
 const mysqlConnection = require("../connection")
 
 //get all list based on the user
-Router.get("/",(req,res) => {
+Router.post("/",(req,res) => {
     const SQL = `SELECT * FROM collections LEFT JOIN collection_list ON  idCollection=id_collection Where iduser=${req.body.id};` 
     mysqlConnection.query(SQL,(err,rows,fields) => {
         if(!err) {
