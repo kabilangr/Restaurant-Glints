@@ -8,6 +8,7 @@ const ResturantRoute =  require("./routes/restaurant")
 const Login = require("./routes/login")
 const signup = require("./routes/signup")
 const collection = require("./routes/collection")
+const list = require("./routes/collectionList")
 
 let app = express()
 
@@ -18,6 +19,7 @@ app.use("/restaurant",ResturantRoute)
 app.use("/login",Login)
 app.use("/signup",signup)
 app.use("/collection",collection)
+app.use("/list",list)
 
 
 
