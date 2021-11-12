@@ -55,7 +55,8 @@ function daysFetch(timeslot) {
     })
     return dayArray
 }
-//get functions
+
+//get functions to fetch all restaurant
 Router.get("/",(req,res)=> {
     mysqlConnection.query("select * from restaurant", (err,rows,fields)=> {
         let data=[]
@@ -77,6 +78,31 @@ Router.get("/",(req,res)=> {
     })
 })
 
+//get method to fetch search 
+Router.get("/:search",(req,res) => {
+    const SQL = `select * from restaurant WHERE name LIKE '${req.params.search}%'`
+    mysqlConnection.query(SQL, (err,rows,fields) => {
+        let data=[]
+        if(!err) {
+            rows.forEach(element => {
+                timeslot=element.timings.split("/")
+                let value = {
+                    name: element.name,
+                    timeline: daysFetch(timeslot)
+                }
+                data.push(value)
+            });
+            console.log(data)
+            res.send(data)
+        }
+        else {
+            console.log(err)
+        }
+    })
+    console.log(req.params.search)
+})
+
+//post method to add restaurant 
 Router.post("/",(req,res) =>{
     let SQL = "INSERT INTO restaurant ( `name`, `timings`) VALUES (?, ?);"
     mysqlConnection.query(SQL,[req.body.name,req.body.timings],(err,row,fields) => {
