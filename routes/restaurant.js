@@ -80,7 +80,7 @@ Router.get("/",(req,res)=> {
 
 //get method to fetch search 
 Router.get("/:search",(req,res) => {
-    const SQL = `select * from restaurant WHERE name LIKE '${req.params.search}%'`
+    const SQL = `select * from restaurant WHERE name LIKE '%${req.params.search}%'`
     mysqlConnection.query(SQL, (err,rows,fields) => {
         let data=[]
         if(!err) {
