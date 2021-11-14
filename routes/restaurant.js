@@ -50,7 +50,7 @@ function daysFetch(timeslot, dayName,givenTime) {
         const endDate = fetched && moment(moment(fetched.split("-")[1],fetched.split("-")[1].toString().includes(":")?["h:mm A"]:["h A"]).format("HH:mm"),["HH:mm"])
         const date = moment(moment(givenTime,["HH:mm"]).format("HH:mm"),["HH:mm"])
         // console.log(startDate,endDate,date)
-        if(dayName == "All" && fetched) {
+        if(dayName === "All" && fetched) {
             if(date.isBefore(endDate) && date.isAfter(startDate)) {
                 finalDate.push(fetched)
             } else if(givenTime === null) {
@@ -60,6 +60,8 @@ function daysFetch(timeslot, dayName,givenTime) {
             }
         } else if(dayName == days[i] && fetched) {
             if(date.isBefore(endDate) && date.isAfter(startDate)) {
+                finalDate.push(fetched)
+            } else if(givenTime === null) {
                 finalDate.push(fetched)
             } else {
                 finalDate.push(null)
@@ -74,13 +76,13 @@ function daysFetch(timeslot, dayName,givenTime) {
     }
     if(!givenTime)
         dayArray ={
-            "Monday": finalDate[0]? finalDate[0]: daysFetched[days[0]],
-            "Tuesday": finalDate[1]? finalDate[1]: daysFetched[days[1]],
-            "Wednesday": finalDate[2]? finalDate[2]: daysFetched[days[2]],
-            "Thursday": finalDate[3]? finalDate[3]: daysFetched[days[3]],
-            "Friday": finalDate[4]? finalDate[4]: daysFetched[days[4]],
-            "Saturday": finalDate[5]? finalDate[5]: daysFetched[days[5]],
-            "Sunday": finalDate[6]? finalDate[6]: daysFetched[days[6]],
+            "Monday": finalDate[0]? finalDate[0]: "",
+            "Tuesday": finalDate[1]? finalDate[1]: "",
+            "Wednesday": finalDate[2]? finalDate[2]: "",
+            "Thursday": finalDate[3]? finalDate[3]: "",
+            "Friday": finalDate[4]? finalDate[4]: "",
+            "Saturday": finalDate[5]? finalDate[5]: "",
+            "Sunday": finalDate[6]? finalDate[6]: "",
             "timeline": timeslot? timeslot: "",
         }
     else
