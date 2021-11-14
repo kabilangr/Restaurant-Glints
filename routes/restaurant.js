@@ -46,9 +46,10 @@ function daysFetch(timeslot, dayName,givenTime) {
     })
     for(var i=0;i<=6;i++) {
         let fetched = daysFetched[days[i]]
-        const startDate = fetched && moment(moment(fetched.split("-")[0],["h : mm A"]).format("HH:mm"),["HH:mm"])
-        const endDate = fetched && moment(moment(fetched.split("-")[1],daysFetched[days[i]].split("-")[1].toString().includes(":")?["h : mm A"]:["h A"]).format("HH:mm"),["HH:mm"])
+        const startDate = fetched && moment(moment(fetched.split("-")[0],fetched.split("-")[0].toString().includes(":")?["h:mm A"]:["h A"]).format("HH:mm"),["HH:mm"])
+        const endDate = fetched && moment(moment(fetched.split("-")[1],fetched.split("-")[1].toString().includes(":")?["h:mm A"]:["h A"]).format("HH:mm"),["HH:mm"])
         const date = moment(moment(givenTime,["HH:mm"]).format("HH:mm"),["HH:mm"])
+        // console.log(startDate,endDate,date)
         if(dayName == "All" && fetched) {
             if(date.isBefore(endDate) && date.isAfter(startDate)) {
                 finalDate.push(fetched)
@@ -67,6 +68,9 @@ function daysFetch(timeslot, dayName,givenTime) {
         else {
             finalDate.push(null)
         }
+        // console.log(startDate.format("HH:mm"),endDate.format("HH:mm"),date.format("HH:mm"))
+        // console.log(date.isAfter(startDate), date.isBefore(endDate))
+        // console.log(fetched.split("-")[0],moment(fetched.split("-")[0],fetched.split("-")[0].toString().includes(":")?["h:mm A"]:["h A"]).format("HH:mm"))
     }
     if(!givenTime)
         dayArray ={
