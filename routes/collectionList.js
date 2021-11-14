@@ -13,11 +13,14 @@ Router.post("/",(req,res) => {
             if(rows.length > 0) {
                 let data ={}
                 rows.forEach((row,index) => {
-                    data[row.name]=[]
+                    data[row.name]=[{
+                        listId: row.idCollection
+                    }]
                 })
                 rows.forEach((row,index) => {
                     if(row.idcollection_list)
                         data[row.name].push({
+                            ...(data[row.name]),
                             id: row.idcollection_list,
                             restaurant: row.restaurant,
                             timing: row.timing,
