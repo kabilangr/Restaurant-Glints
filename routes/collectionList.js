@@ -21,6 +21,7 @@ Router.post("/",(req,res) => {
                             id: row.idcollection_list,
                             restaurant: row.restaurant,
                             timing: row.timing,
+                            listId: row.idCollection
                         })
                 })
                 res.send({
