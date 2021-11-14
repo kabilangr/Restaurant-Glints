@@ -20,7 +20,6 @@ Router.post("/",(req,res) => {
                 rows.forEach((row,index) => {
                     if(row.idcollection_list)
                         data[row.name].push({
-                            ...(data[row.name]),
                             id: row.idcollection_list,
                             restaurant: row.restaurant,
                             timing: row.timing,
