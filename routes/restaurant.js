@@ -45,7 +45,6 @@ function daysFetch(timeslot, dayName,givenTime) {
         })
     })
     for(var i=0;i<=6;i++) {
-        console.log("here is ", days[i],daysFetched[days[i]])
         let fetched = daysFetched[days[i]]
         const startDate = fetched && moment(moment(fetched.split("-")[0],["h : mm A"]).format("HH:mm"),["HH:mm"])
         const endDate = fetched && moment(moment(fetched.split("-")[1],daysFetched[days[i]].split("-")[1].toString().includes(":")?["h : mm A"]:["h A"]).format("HH:mm"),["HH:mm"])
@@ -69,16 +68,28 @@ function daysFetch(timeslot, dayName,givenTime) {
             finalDate.push(null)
         }
     }
-    dayArray ={
-        "Monday": finalDate[0]? finalDate[0]: daysFetched[days[0]],
-        "Tuesday": finalDate[1]? finalDate[1]: daysFetched[days[1]],
-        "Wednesday": finalDate[2]? finalDate[2]: daysFetched[days[2]],
-        "Thursday": finalDate[3]? finalDate[3]: daysFetched[days[3]],
-        "Friday": finalDate[4]? finalDate[4]: daysFetched[days[4]],
-        "Saturday": finalDate[5]? finalDate[5]: daysFetched[days[5]],
-        "Sunday": finalDate[6]? finalDate[6]: daysFetched[days[6]],
-        "timeline": timeslot? timeslot: "",
-    }
+    if(!givenTime)
+        dayArray ={
+            "Monday": finalDate[0]? finalDate[0]: daysFetched[days[0]],
+            "Tuesday": finalDate[1]? finalDate[1]: daysFetched[days[1]],
+            "Wednesday": finalDate[2]? finalDate[2]: daysFetched[days[2]],
+            "Thursday": finalDate[3]? finalDate[3]: daysFetched[days[3]],
+            "Friday": finalDate[4]? finalDate[4]: daysFetched[days[4]],
+            "Saturday": finalDate[5]? finalDate[5]: daysFetched[days[5]],
+            "Sunday": finalDate[6]? finalDate[6]: daysFetched[days[6]],
+            "timeline": timeslot? timeslot: "",
+        }
+    else
+        dayArray ={
+            "Monday": finalDate[0]? finalDate[0]: "",
+            "Tuesday": finalDate[1]? finalDate[1]: "",
+            "Wednesday": finalDate[2]? finalDate[2]: "",
+            "Thursday": finalDate[3]? finalDate[3]: "",
+            "Friday": finalDate[4]? finalDate[4]: "",
+            "Saturday": finalDate[5]? finalDate[5]: "",
+            "Sunday": finalDate[6]? finalDate[6]: "",
+            "timeline": timeslot? timeslot: "",
+        }
     return dayArray
 }
 
@@ -95,7 +106,6 @@ Router.get("/",(req,res)=> {
                 }
                 data.push(value)
             });
-            // console.log(data)
             res.send(data)
         }
         else {
@@ -109,9 +119,7 @@ Router.get("/search",(req,res) => {
     const search = req.query.search
     const day = req.query.day
     const time = req.query.time==="null"? null: req.query.time
-    console.log("helloooooooo",search,day,time)
     const SQL = `select * from restaurant WHERE name LIKE '%${search}%'`
-    console.log("helloooooooo",search,day,time)
     mysqlConnection.query(SQL, (err,rows,fields) => {
         let data=[]
         if(!err) {
@@ -123,14 +131,13 @@ Router.get("/search",(req,res) => {
                 }
                 data.push(value)
             });
-            console.log(data)
             res.send(data)
         }
         else {
             console.log(err)
         }
     })
-    console.log(req.params.search)
+    // console.log(req.params.search)
 })
 
 //post method to add restaurant 
