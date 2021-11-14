@@ -129,7 +129,16 @@ Router.get("/search",(req,res) => {
                     name: element.name,
                     timeline: daysFetch(timeslot, day,time)
                 }
-                data.push(value)
+                let check = value.timeline
+                if(check["Monday"] !=="" ||
+                    check["Tuesday"] !=="" ||
+                    check["Wednesday"] !=="" ||
+                    check["Thursday"] !=="" ||
+                    check["Friday"] !=="" ||
+                    check["Saturday"] !=="" ||
+                    check["Sunday"] !=="") {
+                        data.push(value)
+                    }
             });
             res.send(data)
         }
