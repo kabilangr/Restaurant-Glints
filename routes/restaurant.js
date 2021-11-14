@@ -1,16 +1,19 @@
 //dependencies import
 const express = require("express")
+const { includes } = require("lodash")
 const Router = express.Router()
+var moment = require('moment')
 
 //mysql connection dependencies
 const mysqlConnection = require("../connection")
 
 const days = ["Mon", "Tues", "Weds", "Thu", "Fri", "Sat", "Sun"]
 
-function daysFetch(timeslot) {
+function daysFetch(timeslot, dayName,givenTime) {
     let data,time
     let dayArray=[]
     let daysFetched ={}
+    let finalDate=[]
     timeslot.forEach(value => {
         data= value.split(",")
         if(!data[data.length-1].substring(0,4).includes("-")) {
@@ -40,19 +43,42 @@ function daysFetch(timeslot) {
                 daysFetched[dayKey] = time
             }
         })
-        dayArray ={
-            "Monday": daysFetched[days[0]]? daysFetched[days[0]]: "",
-            "Tuesday": daysFetched[days[1]]? daysFetched[days[1]]: "",
-            "Wednesday": daysFetched[days[2]]? daysFetched[days[2]]: "",
-            "Thursday": daysFetched[days[3]]? daysFetched[days[3]]: "",
-            "Friday": daysFetched[days[4]]? daysFetched[days[4]]: "",
-            "Saturday": daysFetched[days[5]]? daysFetched[days[5]]: "",
-            "Sunday": daysFetched[days[6]]? daysFetched[days[6]]: "",
-        }
-        // console.log(daysFetched)
-        // console.log(data)
-        // console.log(value)
     })
+    for(var i=0;i<=6;i++) {
+        console.log("here is ", days[i],daysFetched[days[i]])
+        let fetched = daysFetched[days[i]]
+        const startDate = fetched && moment(moment(fetched.split("-")[0],["h : mm A"]).format("HH:mm"),["HH:mm"])
+        const endDate = fetched && moment(moment(fetched.split("-")[1],daysFetched[days[i]].split("-")[1].toString().includes(":")?["h : mm A"]:["h A"]).format("HH:mm"),["HH:mm"])
+        const date = moment(moment(givenTime,["HH:mm"]).format("HH:mm"),["HH:mm"])
+        if(dayName == "All" && fetched) {
+            if(date.isBefore(endDate) && date.isAfter(startDate)) {
+                finalDate.push(fetched)
+            } else if(givenTime === null) {
+                finalDate.push(fetched)
+            } else {
+                finalDate.push(null)
+            }
+        } else if(dayName == days[i] && fetched) {
+            if(date.isBefore(endDate) && date.isAfter(startDate)) {
+                finalDate.push(fetched)
+            } else {
+                finalDate.push(null)
+            }
+        }
+        else {
+            finalDate.push(null)
+        }
+    }
+    dayArray ={
+        "Monday": finalDate[0]? finalDate[0]: daysFetched[days[0]],
+        "Tuesday": finalDate[1]? finalDate[1]: daysFetched[days[1]],
+        "Wednesday": finalDate[2]? finalDate[2]: daysFetched[days[2]],
+        "Thursday": finalDate[3]? finalDate[3]: daysFetched[days[3]],
+        "Friday": finalDate[4]? finalDate[4]: daysFetched[days[4]],
+        "Saturday": finalDate[5]? finalDate[5]: daysFetched[days[5]],
+        "Sunday": finalDate[6]? finalDate[6]: daysFetched[days[6]],
+        "timeline": timeslot? timeslot: "",
+    }
     return dayArray
 }
 
@@ -79,8 +105,13 @@ Router.get("/",(req,res)=> {
 })
 
 //get method to fetch search 
-Router.get("/:search",(req,res) => {
-    const SQL = `select * from restaurant WHERE name LIKE '%${req.params.search}%'`
+Router.get("/search",(req,res) => {
+    const search = req.query.search
+    const day = req.query.day
+    const time = req.query.time==="null"? null: req.query.time
+    console.log("helloooooooo",search,day,time)
+    const SQL = `select * from restaurant WHERE name LIKE '%${search}%'`
+    console.log("helloooooooo",search,day,time)
     mysqlConnection.query(SQL, (err,rows,fields) => {
         let data=[]
         if(!err) {
@@ -88,7 +119,7 @@ Router.get("/:search",(req,res) => {
                 timeslot=element.timings.split("/")
                 let value = {
                     name: element.name,
-                    timeline: daysFetch(timeslot)
+                    timeline: daysFetch(timeslot, day,time)
                 }
                 data.push(value)
             });
